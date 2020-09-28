@@ -9,7 +9,7 @@ Puppet::Type.type(:pspackageprovider).provide :powershellcore do
   def self.invoke_ps_command(command)
     # override_locale is necessary otherwise the Install-Module commands silently fails on Linux
     result = Puppet::Util::Execution.execute(['pwsh', '-NoProfile', '-NonInteractive', '-NoLogo', '-Command',
-                                              "$ProgressPreference = 'SilentlyContinue'; $ErrorActionPreference = 'Stop'; #{command}"],
+                                              "$ProgressPreference = 'SilentlyContinue'; $ErrorActionPreference = 'Stop'; [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; #{command}"],
                                              override_locale: false)
     result.lines
   end
